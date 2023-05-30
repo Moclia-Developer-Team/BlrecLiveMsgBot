@@ -1,0 +1,2 @@
+# BlrecLiveMsgBot
+基于Blrec录播姬和onebot v11的qq直播提醒机器人
