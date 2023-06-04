@@ -103,7 +103,7 @@ func CreateConfigFile() int {
 			ApiURL:      "http://127.0.0.1:2233",
 			APIKey:      "bili2233"},
 	}
-	confFile, err := os.Create("config.json")
+	confFile, err := os.Create("data/config.json")
 	if err != nil {
 		return 1
 	}
@@ -125,7 +125,7 @@ func CreateConfigFile() int {
 
 func ReadConfigFile() {
 	var conf ConfigData
-	file, err := os.ReadFile("config.json")
+	file, err := os.ReadFile("data/config.json")
 	if err != nil {
 		return
 	}
@@ -143,7 +143,7 @@ func UpdateConfigFile() {
 	}
 	var confStr bytes.Buffer
 	err = json.Indent(&confStr, updConfData, "", "\t")
-	file, err := os.OpenFile("config.json", os.O_WRONLY|os.O_TRUNC|os.O_WRONLY, 0644)
+	file, err := os.OpenFile("data/config.json", os.O_WRONLY|os.O_TRUNC|os.O_WRONLY, 0644)
 	if err != nil {
 		return
 	}
@@ -176,7 +176,7 @@ func CreateDataFile() int {
 		},
 	}
 	// 创建空文件
-	dataFile, err := os.Create("data.json")
+	dataFile, err := os.Create("data/data.json")
 	if err != nil {
 		return 1
 	}
@@ -199,7 +199,7 @@ func CreateDataFile() int {
 // ReadDataFile 读取配置文件内容写入通道
 func ReadDataFile() {
 	var rcd RecordData
-	file, err := os.ReadFile("data.json")
+	file, err := os.ReadFile("data/data.json")
 	if err != nil {
 		return
 	}
@@ -220,7 +220,7 @@ func UpdateDataFile() {
 	}
 	var dataStr bytes.Buffer
 	err = json.Indent(&dataStr, updRCData, "", "\t")
-	file, err := os.OpenFile("data.json", os.O_WRONLY|os.O_TRUNC|os.O_WRONLY, 0644)
+	file, err := os.OpenFile("data/data.json", os.O_WRONLY|os.O_TRUNC|os.O_WRONLY, 0644)
 	if err != nil {
 		return
 	}
