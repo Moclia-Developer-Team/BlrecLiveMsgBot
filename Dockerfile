@@ -5,6 +5,7 @@ ENV GOOS=linux GOARCH=amd64
 RUN mkdir /src/build && \
     go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn,direct && \
+    go mod tidy && \
     go build -v -o /src/build/BlrecLivePostBot && \
     chmod +x /src/build/BlrecLivePostBot
 
