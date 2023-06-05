@@ -20,7 +20,7 @@ function：
 不存在任意文件自动创建空白文件
 */
 func init() {
-	switch data.CheckFile("config.json") {
+	switch data.CheckFile("data/config.json") {
 	case -1:
 		// 无法操作，直接退出
 		log.Fatal("无目录操作权限！")
@@ -41,7 +41,7 @@ func init() {
 		break
 	}
 
-	switch data.CheckFile("data.json") {
+	switch data.CheckFile("data/data.json") {
 	case -1:
 		// 无法操作，直接退出
 		log.Fatal("无目录操作权限！")
