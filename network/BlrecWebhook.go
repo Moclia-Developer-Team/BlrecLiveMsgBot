@@ -77,8 +77,9 @@ func RecvBlrecWebhook(writer http.ResponseWriter, req *http.Request) {
 
 // StartWeb 开启web服务
 func StartWeb(addr string, postUrl string) {
-	log.Info("[webhook] Http服务开始监听地址：http://", addr, postUrl)
+	log.Info("[http] Http服务开始监听地址：http://", addr, postUrl)
 	http.HandleFunc(postUrl, RecvBlrecWebhook)
+	http.HandleFunc("/api/v1/system/healthcheck", HealthCheck)
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatal("开启Http服务监听出现错误:", err.Error())

@@ -15,12 +15,3 @@ func HealthCheck(writer http.ResponseWriter, _ *http.Request) {
 		return
 	}
 }
-
-func StartAPIListen(addr string) {
-	log.Info("[RESTful API] Http服务开始监听地址：http://", addr)
-	http.HandleFunc("/api/v1/system/healthcheck", HealthCheck)
-	err := http.ListenAndServe(addr, nil)
-	if err != nil {
-		log.Fatal("开启Http服务监听出现错误:", err.Error())
-	}
-}

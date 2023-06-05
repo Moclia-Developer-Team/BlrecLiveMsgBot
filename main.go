@@ -80,9 +80,8 @@ func main() {
 	log.Info("开始运行主程序")
 	//log.Info(conf)
 	go network.UpdateMixinKey()
-	// 启动webhook服务器
+	// 启动http服务器
 	go network.StartWeb(conf.BlrecConfig.WebhookAddr, conf.BlrecConfig.WebhookPath)
-	go network.StartAPIListen(conf.BlrecConfig.WebhookAddr)
 	// 启动zerobot
 	go zero.RunAndBlock(&zero.Config{
 		NickName:      []string{conf.BotConfig.Name},
