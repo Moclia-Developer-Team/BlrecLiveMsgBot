@@ -49,6 +49,7 @@ func RecvBlrecWebhook(writer http.ResponseWriter, req *http.Request) {
 		// 错误处理
 		if err != nil {
 			log.Warn("[webhook] 解析BlrecJsonData时出现错误！位于LiveBeganEvent")
+			log.Debug(string(jsonData.Data))
 			return
 		}
 		showMsg := "您关注的主播【" + dat.UserInfo.Name + "】正在直播：\n" +
@@ -63,6 +64,7 @@ func RecvBlrecWebhook(writer http.ResponseWriter, req *http.Request) {
 		err := json.Unmarshal(jsonData.Data, &dat)
 		if err != nil {
 			log.Warn("[webhook] 解析BlrecJsonData时出现错误！位于LiveEndedEvent")
+			log.Debug(string(jsonData.Data))
 			return
 		}
 		showMsg := "您关注的主播【" + dat.UserInfo.Name + "】下播了"
