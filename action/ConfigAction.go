@@ -10,6 +10,7 @@ import (
 func DelRegisterConf(uid int64, pgid int64, isPrivate bool) error {
 	rcd := <-data.RCData // 将通道内的数据拉下来
 	pos := data.IsRegisted(uid)
+	isDeleted := false
 	if pos == -1 {
 		return errors.New("主播配置文件不存在")
 	}
@@ -19,6 +20,7 @@ func DelRegisterConf(uid int64, pgid int64, isPrivate bool) error {
 			if pid == pgid {
 				rcd.Users[pos].Privates =
 					append(rcd.Users[pos].Privates[:index], rcd.Users[pos].Privates[index+1:]...) // 将号码从私聊中删除
+				isDeleted = true
 				break
 			}
 		}
@@ -27,9 +29,14 @@ func DelRegisterConf(uid int64, pgid int64, isPrivate bool) error {
 			if gid.Gid == pgid {
 				rcd.Users[pos].Groups =
 					append(rcd.Users[pos].Groups[:index], rcd.Users[pos].Groups[index+1:]...) // 将号码从私聊中删除
+				isDeleted = true
 				break
 			}
 		}
+	}
+	if !isDeleted {
+		data.RCData <- rcd
+		return errors.New("主播未在本频道中注册")
 	}
 	// 检查配置发起者，如果不是管理员发起就同时删除blrec记录
 	if rcd.Users[pos].AddBy != 0 {
@@ -79,6 +86,9 @@ func RegisterNewMember(adder int64, uid int64, roomid int64) {
 func RegisterMember(mid int64, user int64, uid int64, roomid int64, isPrivate bool) error {
 	uidPos := data.IsRegisted(uid) // 判断主播是否已经注册
 	if uidPos != -1 {              // 已经注册直接添加配置
+		if data.CheckUsersIsRegisted(mid, uidPos, isPrivate) {
+			return errors.New("主播已在本频道注册")
+		}
 		data.AddNewChatToMember(uidPos, mid, isPrivate)
 	} else { // 未被注册先注册后添加
 		RegisterNewMember(user, uid, roomid)

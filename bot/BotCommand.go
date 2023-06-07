@@ -232,14 +232,14 @@ func DefineBotCommand() {
 			if zero.OnlyGroup(ctx) {
 				err := delRoom(ctx.Event.GroupID, dels, false)
 				if err != nil {
-					ctx.Send(message.Message{message.Text("删除主播失败：" + dels)})
+					ctx.Send(message.Message{message.Text("删除主播失败：" + dels + "，原因：" + err.Error())})
 				} else {
 					ctx.Send(message.Message{message.Text("删除主播成功：" + dels)})
 				}
 			} else if zero.OnlyPrivate(ctx) {
 				err := delRoom(ctx.Event.GroupID, dels, true)
 				if err != nil {
-					ctx.Send(message.Message{message.Text("删除主播失败：" + dels)})
+					ctx.Send(message.Message{message.Text("删除主播失败：" + dels + "，原因：" + err.Error())})
 				} else {
 					ctx.Send(message.Message{message.Text("删除主播成功：" + dels)})
 				}

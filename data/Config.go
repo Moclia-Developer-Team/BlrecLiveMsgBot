@@ -356,3 +356,26 @@ func ChangeAtALL(gid int64, uid int64) error {
 	UpdateDataFile()
 	return nil
 }
+
+// CheckUsersIsRegisted 检查主播配置文件下是否注册对应的群聊/私聊
+func CheckUsersIsRegisted(mid int64, uidPos int, isPrivate bool) bool {
+	rcd := <-RCData
+	RCData <- rcd
+	isreg := false
+	if isPrivate {
+		for _, priv := range rcd.Users[uidPos].Privates {
+			if priv == mid {
+				isreg = true
+				break
+			}
+		}
+	} else {
+		for _, group := range rcd.Users[uidPos].Groups {
+			if group.Gid == mid {
+				isreg = true
+				break
+			}
+		}
+	}
+	return isreg
+}
