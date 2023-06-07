@@ -22,7 +22,7 @@ type blrecJson struct {
 type liveBeginAndEnd struct {
 	UserInfo struct {
 		Name string `json:"name"` // 主播用户名
-		Uid  int64  `json:"uid"`  // 主播的个人ID（不知道啥时候会达到需要大数类的长度）
+		//Uid  int64  `json:"uid"`  // 主播的个人ID（不知道啥时候会达到需要大数类的长度）
 	} `json:"user_info"`
 	RoomInfo struct {
 		Uid    int64  `json:"uid"`     // 主播个人ID
@@ -48,27 +48,25 @@ func RecvBlrecWebhook(writer http.ResponseWriter, req *http.Request) {
 		err := json.Unmarshal(jsonData.Data, &dat)
 		// 错误处理
 		if err != nil {
-			log.Warn("[webhook] 解析BlrecJsonData时出现错误！位于LiveBeganEvent")
-			log.Debug(string(jsonData.Data))
+			log.Warn("[webhook] 解析BlrecJsonData时出现错误！位于LiveBeganEvent", string(jsonData.Data))
 			return
 		}
 		showMsg := "您关注的主播【" + dat.UserInfo.Name + "】正在直播：\n" +
 			dat.RoomInfo.Title +
 			"\n[CQ:image,file=" + dat.RoomInfo.Cover + "]" +
 			"\nhttps://live.bilibili.com/" + strconv.FormatInt(dat.RoomInfo.RoomId, 10)
-		retuInfo := [2]string{strconv.FormatInt(dat.UserInfo.Uid, 10), showMsg} // 构建通过管道传输的内容
+		retuInfo := [2]string{strconv.FormatInt(dat.RoomInfo.Uid, 10), showMsg} // 构建通过管道传输的内容
 		LiveMsg <- retuInfo                                                     // 将用户id和消息内容通过管道传输到bot接口
 		break
 	case "LiveEndedEvent":
 		var dat liveBeginAndEnd
 		err := json.Unmarshal(jsonData.Data, &dat)
 		if err != nil {
-			log.Warn("[webhook] 解析BlrecJsonData时出现错误！位于LiveEndedEvent")
-			log.Debug(string(jsonData.Data))
+			log.Warn("[webhook] 解析BlrecJsonData时出现错误！位于LiveEndedEvent", string(jsonData.Data))
 			return
 		}
 		showMsg := "您关注的主播【" + dat.UserInfo.Name + "】下播了"
-		retuInfo := [2]string{strconv.FormatInt(dat.UserInfo.Uid, 10), showMsg} // 构建通过管道传输的内容
+		retuInfo := [2]string{strconv.FormatInt(dat.RoomInfo.Uid, 10), showMsg} // 构建通过管道传输的内容
 		LiveMsg <- retuInfo                                                     // 将用户id和消息内容通过管道传输到bot接口
 		break
 	default:

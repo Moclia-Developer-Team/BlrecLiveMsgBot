@@ -19,6 +19,7 @@ func addRoom(pgid int64, user int64, mid string, isPrivate bool) error {
 	mark, err := data.CheckPrefix(mid, []string{"uid", "room"}) // 检查并读取mid前缀
 	if err != nil {
 		rerr = errors.New("输入的ID不合法" + mid)
+		return rerr
 	}
 	mid = strings.TrimPrefix(mid, mark)
 	id, _ := strconv.ParseInt(mid, 10, 64)
@@ -49,6 +50,7 @@ func delRoom(pgid int64, mid string, isPrivate bool) error {
 	mark, err := data.CheckPrefix(mid, []string{"uid", "room"}) // 检查并读取mid前缀
 	if err != nil {
 		rerr = errors.New("输入的ID不合法" + mid)
+		return rerr
 	}
 	mid = strings.TrimPrefix(mid, mark)
 	id, _ := strconv.ParseInt(mid, 10, 64)
@@ -73,6 +75,7 @@ func atAllTriger(gid int64, mid string) error {
 	mark, err := data.CheckPrefix(mid, []string{"uid", "room"}) // 检查并读取mid前缀
 	if err != nil {
 		rerr = errors.New("输入的ID不合法" + mid)
+		return rerr
 	}
 	mid = strings.TrimPrefix(mid, mark)
 	id, _ := strconv.ParseInt(mid, 10, 64)
@@ -304,6 +307,9 @@ func SendMessageByUser(userid int64, message string) {
 		return
 	}
 	for sendGroup, setAtAll := range gdata {
+		if sendGroup == 0 {
+			continue
+		}
 		var msg string
 		if setAtAll {
 			msg = "[CQ:At,all]" + message
