@@ -312,7 +312,7 @@ func SendMessageByUser(userid int64, message string) {
 		}
 		var msg string
 		if setAtAll {
-			msg = "[CQ:At,all]" + message
+			msg = "[CQ:at,qq=all]" + message
 		} else {
 			msg = message
 		}
